@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/schemas/user.schema';
+import { UserIdentifier } from '../../interfaces/User.interface';
+import { User, UserDocument } from '../../schemas/user.schema';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-  async findUser(identifier) {
+
+  async findUser(identifier: UserIdentifier) {
     return await this.userModel.findOne({ ...identifier });
   }
 
@@ -15,6 +17,6 @@ export class UserService {
       ...identifier,
     });
     user.set({ ...newDetails });
-    await user.save();
+    return await user.save();
   }
 }
