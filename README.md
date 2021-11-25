@@ -42,7 +42,7 @@ SERVER_PORT=<SERVER PORT>
 2. run the image in a container 
 
    ```powershell
-   docker run -d -p <PORT>:<PORT> --name portfolio <Image id>
+   docker run -d -p <PORT>:<PORT> --name <name> <Image id>
    ```
 
    > Use the command **```docker images```** to get the list of images and their details
