@@ -96,7 +96,9 @@ responds with a JSON object with the following structure
 
 The database module connects to Mongo DB using the details provided in the `.env` file
 
-It expects a user collection with the following structure for user documents
+collection name: **users**
+
+It expects a collection with the following structure for user documents
 
 | key              | type   | default    |
 | ---------------- | ------ | ---------- |
