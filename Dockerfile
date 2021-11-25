@@ -12,6 +12,10 @@ RUN npm install
 # RUN npm ci --only=production# Bundle app source
 COPY . .
 RUN npm run build
+
+#Exposes out api endpoint port
 EXPOSE 3000
+
+#runs the build file
 CMD [ "node", "dist/main" ]
 
