@@ -1,73 +1,110 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Setting up
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+1. clone the repository: https://github.com/bitbinary/nestjsApp.git
+2. navigate to the cloned repository folder
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Setting up the environment variables
 
-## Description
+1. Create the `.env` file in the root directory
+2. Add the following environment variables
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```
+TOKEN_SECRET=<JWT TOKEN SECRET>
+MONGO_USERNAME=<MONGO USERNAME>
+MONGO_PASSWORD=<MONGO PASSWORD>
+MONGO_DB=<MONGO DB NAME>
+MONGO_URL=<MONGO CLUSTER URL> ex: XXXXX.XXXXX.mongodb.net
+SERVER_HOSTNAME=<HOST NAME>
+SERVER_PORT=<SERVER PORT>
 ```
 
-## Running the app
+## Installing packages
 
-```bash
-# development
-$ npm run start
+1. run `npm install` in the root directory
+2. Once the packages are successfully installed, 
+   1. run `npm run start:dev` to start in **dev**
+   2. run `npm run build` to **build**
+   3. run `npm run test` to run **unit test**
+   4. run `npm run test:e2e` to run **e2e test**  
 
-# watch mode
-$ npm run start:dev
+## Docker
 
-# production mode
-$ npm run start:prod
+1. Creating Docker image
+
+   > NOTE: Make sure the port exposed in the **Dockerfile** is the one specified in the .env file
+
+   run the command from the root directory 
+
+   ```powershell
+   docker build . -t <your username>/node-web-app
+   ```
+
+2. run the image in a container 
+
+   ```powershell
+   docker run -d -p <PORT>:<PORT> --name portfolio <Image id>
+   ```
+
+   > Use the command **```docker images```** to get the list of images and their details
+
+   
+
+# Using the Application
+
+The application supports post request to the <SERVERHOST:PORT> that the application is running on.(ex: localhost:3000)
+
+#### Request
+
+Create a post request with the user credentials send as **JSON object**. The application expects the request to be with **content-type: application/json**
+Expected Input: 
+
+| KEY      | VALUE  |
+| -------- | ------ |
+| username | string |
+| password | string |
+
+sample value:
+
+```json
+{
+username: "test",
+password: "testPassword"
+}
 ```
 
-## Test
+#### Response
 
-```bash
-# unit tests
-$ npm run test
+responds with a JSON object with the following structure
 
-# e2e tests
-$ npm run test:e2e
+##### Success response
 
-# test coverage
-$ npm run test:cov
-```
+| status  | 200     |
+| ------- | ------- |
+| success | Boolean |
+| token   | string  |
 
-## Support
+##### Failure response
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| status  | 200     |
+| ------- | ------- |
+| success | Boolean |
+| message | string  |
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+# DATABASE
 
-Nest is [MIT licensed](LICENSE).
+The database module connects to Mongo DB using the details provided in the `.env` file
+
+It expects a user collection with the following structure for user documents
+
+| key              | type   | default    |
+| ---------------- | ------ | ---------- |
+| uid              | string | no default |
+| username         | string | no default |
+| password         | string | no default |
+| createdAt        | Date   | Date.now() |
+| lockAttemptCount | number | 0          |
+| lockExpiry       | Date   | Date.now() |
+| token            | string | null       |
+
