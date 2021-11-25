@@ -9,9 +9,9 @@ import config from './constants/config';
 import { tokenConfig } from './constants/TokenConfig';
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [config, tokenConfig] }),
-    AuthenticationModule,
-    DatabaseModule,
+    ConfigModule.forRoot({ isGlobal: true, load: [config, tokenConfig] }), // Provides the config values and constants
+    AuthenticationModule, // Manages the authentication part of the application
+    DatabaseModule, // Manages the database part of the application
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],

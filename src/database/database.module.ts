@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('mongo.url'),
       }),
-      inject: [ConfigService],
+      inject: [ConfigService], // required to provide the config values
     }),
     UserModule,
   ],
